@@ -2,10 +2,8 @@
 	Временная сложность: Временная сложность min_heap — O(Logn). 
 	Временная сложность build_minheap() равна O(n), а 
 	Общее время работы пирамидальной сортировки — O(nLogn)
-
 	Пирамидальная сортировка алгоритм сортировки, работающий в худшем, в среднем и в 
 	лучшем случае за O(n log n) операций при сортировке n элементов.
-
 	Количество применяемой служебной памяти не зависит от размера массива(то есть, O(1)).
 */
 
@@ -49,9 +47,10 @@ int inputSize() {
 }
 
 /// <summary>
-/// Алгоритм сортировки
+/// Основная функция, выполняющая пирамидальную сортировку
 /// </summary>
 /// <param name="_arr">Ссылка на массив</param>
+/// <param name="m>Наименьший элемент</param>
 /// <param name="_size>Размерность массива</param>
 void min_heap(int* _arr, int m, int n) {
 	int j, t;
@@ -71,6 +70,11 @@ void min_heap(int* _arr, int m, int n) {
 	return;
 }
 
+/// <summary>
+/// Построение кучи
+/// </summary>
+/// <param name="_arr">Ссылка на массив</param>
+/// <param name="_size>Размерность массива</param>
 void build_minheap(int* _arr, int _size) {
 	int k;
 	for (k = _size / 2; k >= 1; k--) {
@@ -85,22 +89,17 @@ int main() {
 	setlocale(LC_ALL, "Russian");
 	int size = inputSize();
 	int* arr = new int[size + 1];
-
 	inputArray(arr, size);
 	cout << "Исходный массив \n";
 	printArray(arr, size);
 	build_minheap(arr, size);
-
 	cout << "Отсортированный массив \n";
 	printArray(arr, size);
-
-	cout << "Добавить новый элемент в массив \n";
+	cout << "Добавить новый элемент в массив: ";
 	cin >> arr[size + 1];
-
 	cout << "Новый исходный массив \n";
 	printArray(arr, size + 1);
 	build_minheap(arr, size + 1);
-
 	cout << "Отсортированный массив \n";
 	printArray(arr, size + 1);
 }
