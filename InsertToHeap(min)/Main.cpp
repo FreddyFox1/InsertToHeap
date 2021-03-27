@@ -1,73 +1,39 @@
-﻿#include <iostream>
+﻿/*
+	Временная сложность: Временная сложность min_heap — O(Logn). 
+	Временная сложность build_minheap() равна O(n), а 
+	Общее время работы пирамидальной сортировки — O(nLogn)
+
+	Пирамидальная сортировка алгоритм сортировки, работающий в худшем, в среднем и в 
+	лучшем случае за O(n log n) операций при сортировке n элементов.
+
+	Количество применяемой служебной памяти не зависит от размера массива(то есть, O(1)).
+*/
+
+#include <iostream>
+#include <conio.h>
 using namespace std;
-
-/// <summary>
-/// Чтобы скопировать поддерево с корневым узлом i, индекс в arr []
-/// </summary>
-/// <param name="arr">Массив</param>
-/// <param name="n">Размерность массива</param>
-/// <param name="i"></param>
-void heapify(int arr[], int n, int i)
-{
-	int smallest = i;
-	int l = 2 * i + 1; // left = 2 * i + 1
-	int r = 2 * i + 2; // right = 2 * i + 2
-	// Если левый дочерний объект меньше корневого
-	if (l < n && arr[l] < arr[smallest])
-		smallest = l;
-	// Если правильный ребенок меньше самого маленького
-	if (r < n && arr[r] < arr[smallest])
-		smallest = r;
-	// Если наименьшее не является корнем
-	if (smallest != i) {
-		swap(arr[i], arr[smallest]);
-		// Рекурсивно накапливаем поврежденное поддерево
-		heapify(arr, n, smallest);
-	}
-}
-
-/// <summary>
-/// Алгоритм сортировки кучи
-/// </summary>
-/// <param name="arr">Массив</param>
-/// <param name="n">Размерность массива</param>
-void heapSort(int arr[], int n)
-{
-	// Строим кучу (переставляем массив)
-	for (int i = n / 2 - 1; i >= 0; i--)
-		heapify(arr, n, i);
-	// один за другим извлекаем элемент из кучи
-	for (int i = n - 1; i >= 0; i--)
-	{
-		// Переместить текущий корень в конец
-		swap(arr[0], arr[i]);
-		// вызвать max heapify для уменьшенной кучи
-		heapify(arr, i, 0);
-	}
-}
 
 /// <summary>
 /// Печатаем массив на консоль
 /// </summary>
-/// <param name="arr">Массив который необходимо вывести</param>
-/// <param name="n">Размерность массива</param>
-void printArray(int arr[], int n)
+/// <param name="_arr">Ссылка на массив для вывода</param>
+/// <param name="_size">Размерность массива</param>
+void printArray(int* _arr, int _size)
 {
-	for (int i = 0; i < n; ++i)
-		cout << arr[i] << " ";
+	for (int i = 1; i <= _size; i++)
+		cout << _arr[i] << " ";
 	cout << "\n";
 }
 
 /// <summary>
 /// Ввод массива
 /// </summary>
-/// <param name="arr">Массив</param>
-/// <param name="n">Размерность массива</param>
-void inputArray(int arr[], int n) {
-
-	for (int i = 0;i < n;i++) {
+/// <param name="_arr">Ссылка на массив</param>
+/// <param name="_size">Размерность массива</param>
+void inputArray(int* _arr, int _size) {
+	for (int i = 1;i <= _size;i++) {
 		cout << "arr[" << i << "]:=";
-		cin >> arr[i];
+		cin >> _arr[i];
 	}
 }
 
@@ -76,22 +42,65 @@ void inputArray(int arr[], int n) {
 /// </summary>
 /// <returns>Возвращает размерность массива</returns>
 int inputSize() {
-	int _n;
+	int _size;
 	cout << "Введите размерность массива: ";
-	cin >> _n;
-	return _n;
+	cin >> _size;
+	return _size;
+}
+
+/// <summary>
+/// Алгоритм сортировки
+/// </summary>
+/// <param name="_arr">Ссылка на массив</param>
+/// <param name="_size>Размерность массива</param>
+void min_heap(int* _arr, int m, int n) {
+	int j, t;
+	t = _arr[m];
+	j = 2 * m;
+	while (j <= n) {
+		if (j < n && _arr[j + 1] < _arr[j])
+			j = j + 1;
+		if (t < _arr[j])
+			break;
+		else if (t >= _arr[j]) {
+			_arr[j / 2] = _arr[j];
+			j = 2 * j;
+		}
+	}
+	_arr[j / 2] = t;
+	return;
+}
+
+void build_minheap(int* _arr, int _size) {
+	int k;
+	for (k = _size / 2; k >= 1; k--) {
+		min_heap(_arr, k, _size);
+	}
 }
 
 /// <summary>
 /// Точка входа в программу
 /// </summary>
-int main()
-{
+int main() {
 	setlocale(LC_ALL, "Russian");
-	int n = inputSize();
-	int* arr = new int[];
-	inputArray(arr, n);
-	heapSort(arr, n);
+	int size = inputSize();
+	int* arr = new int[size + 1];
+
+	inputArray(arr, size);
+	cout << "Исходный массив \n";
+	printArray(arr, size);
+	build_minheap(arr, size);
+
 	cout << "Отсортированный массив \n";
-	printArray(arr, n);
+	printArray(arr, size);
+
+	cout << "Добавить новый элемент в массив \n";
+	cin >> arr[size + 1];
+
+	cout << "Новый исходный массив \n";
+	printArray(arr, size + 1);
+	build_minheap(arr, size + 1);
+
+	cout << "Отсортированный массив \n";
+	printArray(arr, size + 1);
 }
